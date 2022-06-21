@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hua.mapper.TypeMapper">
+
+    <select id="queryTypeById" parameterType="long" resultType="Type">
+        select id, name
+        from t_type
+        where id = #{id}
+    </select>
+
+    <select id="queryTypeByName" parameterType="String" resultType="Type">
+        select id, name
+        from t_type
+        where name = #{name}
+    </select>
+
+    <select id="queryAllTypes" resultType="Type">
+        select id, name
+        from t_type
+    </select>
+
+    <select id="queryAllTypesByQuery" resultMap="TypeMap">
+        select id, name
+        from t_type
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="TypeMap" type="Type">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <insert id="saveType" parameterType="Type">
+        insert into t_type(name)
+        values (#{name})
+    </insert>
+
+    <update id="updateType" parameterType="Type">
+        update t_type
+        set name = #{name}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteType" parameterType="Long">
+        delete
+        from t_type
+        where id = #{id}
+    </delete>
+
+</mapper>

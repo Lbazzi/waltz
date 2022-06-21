@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getScheme()}+'://'+${#request.getServerName()}+':'+${#request.getServerPort()}+${#request.getContextPath()}">
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/css/normalize.min.css}" rel="stylesheet">
+    <script th:inline="javascript">
+        var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+    </script>
+</head>
+<body id="card1">
+<div id="formContainer" class="dwo">
+    <div class="formLeft">
+        <img th:src="@{/image/logo3.jpg}">
+    </div>
+    <div class="formRight">
+        <!-- Forgot password form -->
+        <form id="forgot" name="myForm" class="otherForm" onsubmit="return false;">
+            <header>
+                <h1>ForGot</h1>
+<!--                <p>输入邮箱找回密码</p>-->
+            </header>
+            <section>
+                <label>
+                    <p>用户名</p>
+                    <input id="username2" type="username2" name="username2" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <label>
+                    <p>修改密码</p>
+                    <input id="password2" type="password2" name="password2" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <button id="submit2" type="button" onclick="modify()">修改密码</button>
+            </section>
+            <footer>
+                <button type="button" class="forgotBtn">返回</button>
+            </footer>
+        </form>
+
+        <!-- Login form -->
+<!--        <form id="login" th:action="@{/admin/login}" method="post">-->
+        <form id="login" onsubmit="return false;">
+            <header>
+                <h1>LOGIN</h1>
+            </header>
+            <section>
+                <label>
+                    <p>用户名</p>
+                    <input id="username" type="text" name="username" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <label>
+                    <p>密码</p>
+                    <input id="password" type="password" name="password" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+<!--                <button id="submit" type="submit" onclick="return check(this.form);">login</button>-->
+                <button id="submit" type="button" onclick="check()" class="">login</button>
+<!--                <button id="submit" type="submit" onclick="check()" class="">login</button>-->
+                <div style="text-align: center" th:unless="${#strings.isEmpty(msg)}" th:text="${msg}"></div>
+                <div id="CheckMsg" style="text-align: center"></div>
+            </section>
+            <footer>
+                <button type="button" class="forgotBtn">Forgot?</button>
+                <button type="button" class="registerBtn">New?</button>
+            </footer>
+        </form>
+
+        <!-- Register form -->
+<!--        <form id="register" class="otherForm" method="post" th:action="@{/admin/register}">-->
+        <form id="register" class="otherForm" onsubmit="return false;">
+            <header>
+                <h1>REGISTER</h1>
+            </header>
+            <section>
+                <label>
+                    <p>昵称</p>
+                    <input id="nickname" type="text" name="nickname" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <label>
+                    <p>用户名</p>
+                    <input id="username1" type="text" name="username" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <label>
+                    <p>QQ邮箱</p>
+                    <input id="email" type="email" name="email" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+                <label>
+                    <p>密码</p>
+                    <input id="password1" type="password" name="password" placeholder=" ">
+                    <div class="border"></div>
+                </label>
+<!--                <button id="submit1" type="submit" onclick="return f(this.form);">register</button>-->
+                <button id="submit1" type="button" class="" onclick="f()">register</button>
+<!--                <button id="submit1" type="submit">register</button>-->
+                <div th:unless="${#strings.isEmpty(rmsg)}" th:text="${rmsg}"></div>
+                <div id="Msg" style="text-align: center"></div>
+            </section>
+            <footer>
+                <button type="button" class="registerBtn">back</button>
+            </footer>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/jquerysession.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/login.js}"></script>
+<script th:src="@{/js/register.js}"></script>
+<script th:src="@{/js/modify.js}"></script>
+<script>
+    $(function () {
+        document.onkeydown = keyDownSearch;
+        function keyDownSearch(e) {
+            var theEvent = e || window.event;
+            var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+            if (code == 13) {
+                $('#submit').click();
+                // $('#submit1').click();
+                return false;
+            }
+            return true;
+        }
+    })
+</script>
+</body>
+</html>

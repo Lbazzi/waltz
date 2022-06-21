@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <link rel="stylesheet" th:href="@{/css/videostyle.css}">
+    <link rel="stylesheet" th:href="@{/css/preload.css}">
+    <title>PreLoad</title>
+</head>
+<body>
+<section class="showcase">
+    <div class="video-container">
+        <video th:src="@{/video/video.mp4}" autoplay muted loop></video>
+<!--        <img th:src="@{/images/cover.jpg}" alt="">-->
+    </div>
+    <div class="content">
+        <h1>One Thing And Good Thing！</h1>
+<!--        <h2>Do one thing at a time, and do well.</h2>-->
+        <a th:href="@{/}" class="btn">Enter</a>
+    </div>
+</section>
+</body>
+
+<body>
+
+<!--<canvas id="q" width="1000" height="1000">-->
+<!--    <div class="content"><a th:href="@{/}" class="btn">Enter</a></div>-->
+<!--</canvas>-->
+
+</body>
+
+<script th:src="@{/js/jquery-1.7.1.min.js}"></script>
+
+<script>
+    $(document).ready(function () {
+        var s = window.screen;
+        var width = q.width = s.width;
+        var height = q.height;
+        var yPositions = Array(300).join(0).split('');
+        var ctx = q.getContext('2d');
+        var draw = function () {
+            ctx.fillStyle = 'rgba(0,0,0,.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = '10pt Georgia';
+            yPositions.map(function (y, index) {
+                text = String.fromCharCode(1e2 + Math.random() * 300);
+                x = (index * 10) + 10;
+                q.getContext('2d').fillText(text, x, y);
+                if (y > Math.random() * 1e4) {
+                    yPositions[index] = 0;
+                } else {
+                    yPositions[index] = y + 10;
+                }
+            });
+        };
+        RunMatrix();
+        function RunMatrix() {
+            Game_Interval = setInterval(draw, 33);
+        }
+    });
+</script>
+
+<!--<script>-->
+<!--    -->
+<!--    $(function () {-->
+<!--        var canvas = $('#q');-->
+<!--        canvas.attr("width", $(window).get(0).innerWidth)-->
+<!--        canvas.attr("height", $(window).get(0).innerHeight)-->
+<!--        var context = canvas.get(0).getContext("2d");-->
+<!--        context.fillRect(0, 0, canvas.width(), canvas.height());-->
+<!--        $(window).resize(function () {-->
+<!--            canvas.attr("width", $(window).get(0).innerWidth)-->
+<!--            canvas.attr("height", $(window).get(0).innerHeight)-->
+<!--            context.fillRect(0, 0, canvas.width(), canvas.height());-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
+
+</html>

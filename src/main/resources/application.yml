@@ -1,0 +1,7 @@
+spring:
+  main:
+    allow-circular-references: true
+  thymeleaf:
+    cache: false
+  profiles:
+    active: dev

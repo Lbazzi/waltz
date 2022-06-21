@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/index_style.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/lib/aplayer/css/aplayer.min.css}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="menu" class="hover_animation menu_open" data-mark="false">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<div id="navgation" class="navgation navgation_close">
+    <ul class="point">
+        <li><a th:href="@{/blog}">博客</a></li>
+        <li><a th:href="@{/archive}">归档</a></li>
+        <li><a th:href="@{/message}">留言</a></li>
+    </ul>
+    <div class="logo"><a th:href="@{/about}">Ahua</a></div>
+</div>
+<div class="section" id="section1">
+    <div class="fp-tablecell">
+        <div class="page1">
+            <div class="nav wow zoomIn" data-wow-duration="2s">
+                <h1 class="header-logo">Ahua</h1>
+                <a class="layui-btn layui-btn-normal" style="margin-top: 20px" th:href="@{/blog}">Enter</a>
+            </div>
+            <a class="next wow fadeInUp" data-wow-duration="2s" id="next"></a>
+        </div>
+    </div>
+</div>
+<div class="section" id="section2">
+    <div class="fp-tablecell">
+        <div class="page2">
+            <div class="warp-box">
+                <div class="new-article">
+                    <div class="inner wow fadeInUp" data-wow-delay=".2s">
+                        <h1>热门文章</h1>
+                        <p>
+                            In case I dont' see you...<br>
+                            Good afternoon, good evening, and good night.
+                        </p>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm4 layui-col-md4 wow fadeInLeft" style="padding: 0 10px" th:each="hotblog : ${hotBlogs}">
+                        <div class="single-news">
+                            <div class="news-head">
+                                <img th:src="${hotblog.firstPicture}">
+                                <a th:href="@{/blog/{id}(id=${hotblog.id})}" class="link"><i class="fa fa-link"></i></a>
+                            </div>
+                            <div class="news-content">
+                                <h4>
+                                    <a th:href="@{/blog/{id}(id=${hotblog.id})}" th:text="${hotblog.title}">
+                                        标题
+                                    </a>
+                                </h4>
+                                <div class="date">
+                                    <p th:text="${#dates.format(hotblog.updateTime,'YYYY-MM-dd')}"></p>
+                                </div>
+                                <p th:text="${#strings.abbreviate(hotblog.description, 40)}"></p>
+                                <a th:href="@{/blog/{id}(id=${hotblog.id})}" class="btn">
+                                    Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section" id="section3">
+    <div class="fp-tablecell">
+        <div class="page3">
+            <div class="warp-box">
+                <div class="warp">
+                    <div class="inner">
+                        <div class="links">
+                            <ul>
+                                <li class="wow fadeInDown"><a th:href="@{/about}">关于</a></li>
+                                <li class="wow fadeInUp"><a th:href="@{/message}">留言</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section" id="section4">
+    <div class="fp-tablecell">
+        <div class="page4">
+            <div class="warp-box">
+                <div class="about">
+                    <div class="inner">
+                        <h1 class="wow fadeInUp">Fade</h1>
+<!--                        <p class="wow fadeInDown">-->
+<!--                            爱好游戏，电影，音乐。-->
+<!--                        </p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer wow fadeInUp" id="contact">
+    <div class="footer-top">
+        <div class="container">
+            <div class="layui-row">
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+                    <div class="single-widget about">
+                        <div class="button">
+                            <a th:href="@{/about}" class="btn layui-btn layui-btn-normal">About Me</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+                    <div class="single-widget">
+                        <h2>相关链接</h2>
+                        <ul class="social-icon">
+                            <li class="active"><a th:href="@{/index}"><i class="fa fa-book"></i>博客</a></li>
+                            <li class="active"><a th:href="@{/message}"><i class="fa fa-comments"></i>留言</a></li>
+                            <li class="active"><a th:href="@{/link}"><i class="fa fa-snowflake-o"></i>友链</a></li>
+                            <li class="active"><a th:href="@{/archive}"><i class="fa fa-files-o"></i>归档</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md4">
+                    <div class="single-widget contact">
+                        <h2>联系我</h2>
+                        <ul class="list">
+                            <li><i class="fa fa-map"></i>地址: 地球村</li>
+                            <li><i class="fa fa-qq"></i>QQ: 670927000 </li>
+                            <li><i class="fa fa-envelope"></i>邮箱: 670927000@qq.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            <div class="layui-row">
+                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 text-center">
+                    <p>Copyright &copy; 2021-2022 Ahua All Rights Reserved </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+<script th:src="@{/lib/aplayer/js/APlayer.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+</body>
+
+<!--pjax-->
+<!--<script th:src="@{/js/pjax/jquery-2.1.4.min.js}"></script>-->
+<!--<script th:src="@{/js/pjax/jquery.pjax.js}"></script>-->
+<!--<script type="text/javascript">-->
+<!--    //pjax-->
+<!--    $(document).pjax('ul a', '#navgation')-->
+<!--</script>-->
+
+<div id="aplayer"></div>
+<meting-js
+        autoplay="false"
+        server="netease"
+        type="playlist"
+        id="6739801094"
+        lrc="1"
+        loop="all"
+        fixed="true"
+        list-folded="true">
+</meting-js>
+
+</html>

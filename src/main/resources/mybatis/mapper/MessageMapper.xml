@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hua.mapper.MessageMapper">
+
+    <!--后台管理留言-->
+    <select id="queryAllAdminMessages" resultType="Message">
+        select *
+        from t_message
+        order by createTime DESC
+    </select>
+
+    <resultMap id="indexMessages" type="Message">
+        <id column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="content" property="content"/>
+        <result column="avatar" property="avatar"/>
+        <result column="createTime" property="createTime"/>
+        <result column="adminMessage" property="adminMessage"/>
+    </resultMap>
+
+    <select id="queryMessageById" resultType="Message">
+        select *
+        from t_message
+        where parentMessageId = #{ParentId}
+        order by createTime desc
+    </select>
+
+    <select id="queryMessageByParentId" resultType="Message">
+        select *
+        from t_message
+        where parentMessageId = #{id}
+        order by createTime desc
+    </select>
+
+    <select id="queryMessageByReplyId" resultType="Message">
+        select *
+        from t_message
+        where parentMessageId = #{replyId}
+        order by createTime desc
+    </select>
+
+    <insert id="saveMessage" parameterType="Message">
+        insert into t_message (nickname, email, content, avatar, createTime, parentMessageId, adminMessage)
+        values (#{nickname}, #{email}, #{content}, #{avatar}, #{createTime}, #{parentMessageId}, #{adminMessage});
+    </insert>
+
+    <delete id="deleteMessage" parameterType="long">
+        delete from t_message where id = #{id}
+    </delete>
+</mapper>

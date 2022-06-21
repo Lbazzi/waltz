@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hua.mapper.CommentMapper">
+
+    <!--后台管理评论-->
+    <select id="listAdminComments" resultMap="indexComments">
+        select *
+        from t_comment
+        order by createTime DESC
+    </select>
+
+    <!--显示在首页的最新评论-->
+    <select id="listAllComments" resultMap="indexComments">
+        select *
+        from t_comment
+        order by createTime DESC limit 0, 10
+    </select>
+
+    <select id="queryAllCommentsByQuery" resultMap="commentMap">
+        select *
+        from t_comment
+        <where>
+            <if test="content != null and content != ''">
+                and content like concat('%',#{content},'%')
+            </if>
+
+            <if test="nickname != null and nickname != ''">
+                and nickname like concat('%',#{nickname},'%')
+            </if>
+
+            <if test="adminComment != null and adminComment != ''">
+                and adminComment = #{adminComment}
+            </if>
+        </where>
+        order by createTime DESC
+    </select>
+
+    <resultMap id="commentMap" type="Comment">
+        <id column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="content" property="content"/>
+        <result column="avatar" property="avatar"/>
+        <result column="createTime" property="createTime"/>
+        <result column="adminComment" property="adminComment"/>
+    </resultMap>
+
+    <select id="getBlog" resultType="Blog">
+        select id, title
+        from t_blog
+        where id = #{blogId}
+    </select>
+
+    <resultMap id="indexComments" type="Comment">
+        <id column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="content" property="content"/>
+        <result column="avatar" property="avatar"/>
+        <result column="createTime" property="createTime"/>
+        <result column="adminComment" property="adminComment"/>
+        <association property="blog" column="blogId" javaType="Blog" select="getBlog">
+            <result column="title" property="title"/>
+        </association>
+
+    </resultMap>
+
+    <select id="listComments" parameterType="long" resultMap="replyComments">
+        select * from t_comment where blogId = #{blogId} and parentCommentId is null order by createTime DESC
+    </select>
+
+    <resultMap id="replyComments" type="Comment">
+        <id column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="content" property="content"/>
+        <result column="avatar" property="avatar"/>
+        <result column="createTime" property="createTime"/>
+        <result column="adminComment" property="adminComment"/>
+        <association property="blog" column="blogId" javaType="Blog" select="getBlog">
+
+        </association>
+        <association property="parentComment" column="parentCommentId" javaType="Comment" select="getParent">
+
+        </association>
+        <collection property="replyComments" javaType="ArrayList" ofType="Comment" select="getreplyComments"
+                    column="id">
+            <association property="parentComment" column="parentCommentId" javaType="Comment" select="getParent">
+            </association>
+        </collection>
+
+    </resultMap>
+
+    <select id="getreplyComments" resultMap="replyComments">
+        select *
+        from t_comment
+        where parentCommentId = #{id}
+    </select>
+
+    <select id="getParent" resultType="Comment">
+        select *
+        from t_comment
+        where id = #{parentCommentd}
+    </select>
+
+    <select id="getCommentByParentId" parameterType="long" resultType="Comment">
+        select *
+        from t_comment
+        where id = #{parentId}
+    </select>
+
+    <insert id="saveComments" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into t_comment(id,nickname,email,adminComment,content,avatar,createTime,blogId,parentCommentId)
+        values (#{id},#{nickname},#{email},#{adminComment},#{content},#{avatar},#{createTime},#{blog.id},#{parentComment.id})
+    </insert>
+
+    <delete id="deleteComments" parameterType="long">
+        delete from t_comment where id = #{id}
+    </delete>
+</mapper>

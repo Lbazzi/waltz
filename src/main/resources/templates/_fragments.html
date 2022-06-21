@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}"></title>
+    <link rel="stylesheet" th:href="@{/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/css/master.css}" />
+    <link rel="stylesheet" th:href="@{/css/gloable.css}" />
+    <link rel="stylesheet" th:href="@{/css/nprogress.css}" />
+    <link rel="stylesheet" th:href="@{/css/timeline.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/aplayer/css/aplayer.min.css}" >
+</head>
+
+<!--头部内容-->
+<header th:fragment="header" class="gird-header">
+    <div class="header-fixed">
+        <div id="#main" class="header-inner">
+            <a th:href="@{/about}" class="header-logo" id="logo">Ahua</a>
+            <nav th:fragment="nav(n)" class="nav" id="nav">
+                <ul>
+                    <li><a th:href="@{/home}"  th:classappend="${n==1} ? 'active'">首页</a></li>
+                    <li><a th:href="@{/blog}" th:classappend="${n==2} ? 'active'">博客</a></li>
+                    <li><a th:href="@{/category}" th:classappend="${n==3} ? 'active'">分类</a></li>
+                    <li><a th:href="@{/archive}" th:classappend="${n==4} ? 'active'">归档</a></li>
+                    <li><a th:href="@{/music}" th:classappend="${n==5} ? 'active'">音乐盒</a></li>
+                    <li><a th:href="@{/message}" th:classappend="${n==7} ? 'active'">留言</a></li>
+                    <li><a th:href="@{/link}" th:classappend="${n==8} ? 'active'">友链</a></li>
+                    <li><a th:href="@{/about}" th:classappend="${n==9} ? 'active'">关于我</a></li>
+                </ul>
+            </nav>
+            <div>
+                <a onclick="out()" class="blog-user"><i class="fa fa-qq"></i></a>
+            </div>
+            <a class="phone-menu">
+                <i></i>
+                <i></i>
+                <i></i>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!--底部内容-->
+<footer th:fragment="footer" class="grid-footer">
+    <div class="footer-fixed">
+        <div class="copyright">
+            <div class="info">
+                <div class="contact">
+                    <a href="https://wpa.qq.com/msgrd?v=3&uin=670927000&site=qq&menu=yes" class="qq" target="_blank" title="670927000"><i class="fa fa-qq"></i></a>
+                    <a href="https://github.com/Lbazzi" class="github" target="_blank" title="Lbazzi"><i class="fa fa-github"></i></a>
+                    <a href="https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=670927000@qq.com" class="email" target="_blank" title="670927000@qq.com"><i class="fa fa-envelope"></i></a>
+                </div>
+                <p class="mt05">
+                    Copyright &copy; 2021-2022 Ahua All Rights Reserved
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<body></body>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+<script th:src="@{/lib/aplayer/js/APlayer.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+
+<script>
+    $(function () {
+        $(document).pjax('a', '#main', {
+            // fragment: '#main',
+            timeout: 1000,
+            cache: false
+        });
+    });
+</script>
+
+</html>

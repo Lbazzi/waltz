@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hua.mapper.BlogMapper">
+
+    <!--根据id获取文章-->
+    <select id="queryBlogById" parameterType="long" resultMap="BlogMap">
+        select id, title, content, firstPicture, likes,
+        flag, views, description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime, updateTime, typeId
+        from t_blog
+        where id=#{id}
+    </select>
+
+    <!--后台获取博客信息-->
+    <select id="queryAllBlogs" resultMap="BlogMap">
+        select id,title,content,firstPicture,likes,
+        flag,views ,description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime , updateTime, typeId
+        from t_blog
+        <where>
+
+            <if test="title != null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+
+            <if test="doRecommend != null and doRecommend != ''">
+                and doRecommend = #{doRecommend}
+            </if>
+
+            <if test="typeId != null and typeId != ''">
+                and typeId = #{typeId}
+            </if>
+
+        </where>
+        order by updateTime DESC
+    </select>
+
+    <!--给前端页面显示的博客文章:已发布的-->
+    <select id="queryAllBlogsOnFront" resultMap="BlogMap">
+        select id, title, content, firstPicture, likes,
+        flag, views, description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime, updateTime, typeId
+        from t_blog
+        <where>
+            and published = true
+            <if test="title != null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+
+            <if test="doRecommend != null and doRecommend != ''">
+                and doRecommend = #{doRecommend}
+            </if>
+
+            <if test="typeId != null and typeId != ''">
+                and typeId = #{typeId}
+            </if>
+
+        </where>
+        order by updateTime DESC
+    </select>
+
+    <!--给前端页面显示的博客文章:最新的前三-->
+    <select id="queryUtdBlogsOnFront" resultMap="BlogMap">
+        select id, title, content, firstPicture, likes,
+        flag, views, description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime, updateTime, typeId
+        from t_blog
+        <where>
+            and published = true
+        </where>
+        order by updateTime DESC limit 0, 3
+    </select>
+
+    <!--给前端页面显示的博客文章:热门的前三-->
+    <select id="queryPopBlogsOnFront" resultMap="BlogMap">
+        select id, title, content, firstPicture, likes,
+        flag, views, description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime, updateTime, typeId
+        from t_blog
+        <where>
+            and published = true
+        </where>
+        order by views DESC limit 0, 3
+    </select>
+
+    <!--普通归档-->
+    <select id="queryAllBlogQuery" resultMap="blog">
+        select b.id, b.title, b.updateTime, b.doRecommend, b.published, b.typeId, b.flag, t.id, t.name from t_blog b left outer join
+        t_type t on b.typeId = t.id
+--         group by year(b.updateTime)
+        order by b.updateTime desc
+    </select>
+
+    <select id="queryAllBlogsByTagIdOnFront" resultMap="blogTag">
+        select b.id, b.title, b.updateTime, b.doRecommend, b.published, b.tagId, b.flag, t.id, t.name from t_blog b left outer join
+        t_tag t on b.tagId = t.id order by b.updateTime desc
+    </select>
+
+    <!--年份归档-->
+    <select id="findGroupYear" resultType="string">
+        select year(b.updateTime) as year
+        from t_blog b
+        group by year(b.updateTime)
+        order by year desc
+    </select>
+
+    <select id="findByYear" parameterType="string" resultType="Blog">
+        select b.id, b.title, b.content, b.firstPicture, b.likes,
+        b.flag, b.views, b.description, b.doAppreciation, b.doShare, b.doComment, b.published,
+        b.doRecommend, b.createTime, b.updateTime, b.typeId
+        from t_blog b
+        where year(b.updateTime) = #{year}
+    </select>
+
+    <resultMap id="blog" type="com.hua.vo.BlogQuery">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="doRecommend" column="doRecommend"/>
+        <result property="published" column="published"/>
+        <result property="typeId" column="typeId"/>
+        <result property="flag" column="flag"/>
+        <association property="type" javaType="Type">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="blogTag" type="com.hua.vo.BlogQuery">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="doRecommend" column="doRecommend"/>
+        <result property="published" column="published"/>
+        <result property="tagId" column="tagId"/>
+        <result property="flag" column="flag"/>
+        <association property="tag" javaType="Tag">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+    
+<!--    <select id="findByGroupYear" resultType="String">-->
+<!--        select function('date_format', b.updateTime, '%Y') as year from Blog b group by function('date_format', b.updateTime, '%Y') order by year desc-->
+<!--    </select>-->
+
+<!--    <select id="findByYear" parameterType="string" resultType="Blog">-->
+<!--        select b from Blog b where function('date_format', b.updateTime, '%Y')-->
+<!--    </select>-->
+
+    <select id="getType" resultType="Type">
+        select *
+        from t_type
+        where id=#{id}
+    </select>
+
+    <select id="getUser" resultType="User">
+        select *
+        from t_user
+        where id=#{id}
+    </select>
+
+    <select id="getTag" resultType="Tag">
+        select *
+        from t_tag
+        where id=#{id}
+    </select>
+
+    <resultMap id="BlogMap" type="Blog">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="firstPicture" column="firstPicture"/>
+        <result property="flag" column="flag"/>
+        <result property="views" column="views"/>
+        <result property="doAppreciation" column="doAppreciation"/>
+        <result property="doShare" column="doShare"/>
+        <result property="doComment" column="doComment"/>
+        <result property="published" column="published"/>
+        <result property="doRecommend" column="doRecommend"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="description" column="description"/>
+        <result property="likes" column="likes"/>
+
+        <association property="type" column="typeId" javaType="Type" select="getType">
+            <result property="name" column="tname"/>
+        </association>
+
+<!--        <association property="tag" column="tagId" javaType="Tag" select="getTag">-->
+<!--            <result property="name" column="tagname"></result>-->
+<!--        </association>-->
+
+    </resultMap>
+
+    <!--useGeneratedKeys="true" keyProperty="id" 这两个属性会返回id主键的值-->
+    <insert id="saveBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
+        insert into t_blog(id, title, content, firstPicture, likes,
+        flag, views, description, doAppreciation, doShare, doComment, published,
+        doRecommend, createTime, updateTime, typeId, userId)
+        values (#{id}, #{title}, #{content}, #{firstPicture}, #{likes}, #{flag}, #{views},
+        #{description}, #{doAppreciation}, #{doShare},#{doComment}, #{published}, #{doRecommend},
+        #{createTime}, #{updateTime}, #{type.id}, #{user.id})
+    </insert>
+
+    <update id="updateBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
+        update t_blog set title = #{title}, content = #{content}, firstPicture = #{firstPicture}, description = #{description},
+        flag = #{flag}, views = #{views}, doAppreciation = #{doAppreciation}, doShare = #{doShare},
+        doComment = #{doComment}, published = #{published}, doRecommend = #{doRecommend}, createTime = #{createTime},
+        updateTime = #{updateTime}, typeId = #{type.id}, userId = #{user.id} where id = #{id};
+    </update>
+
+    <delete id="deleteBlog" parameterType="long">
+        delete
+        from t_blog
+        where id = #{id}
+    </delete>
+
+    <update id="incView" parameterType="Blog">
+        update t_blog set
+        views = views + 1
+        where id = #{id}
+    </update>
+
+    <update id="incLikes" parameterType="Blog">
+        update t_blog set
+        likes = likes + #{likes}
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+    <link rel="stylesheet" th:href="@{/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/blogmaster.css}" />
+<!--    <link rel="stylesheet" th:href="@{/css/master.css}" />-->
+    <link rel="stylesheet" th:href="@{/css/gloable.css}" />
+    <link rel="stylesheet" th:href="@{/css/nprogress.css}" />
+    <link rel="stylesheet" th:href="@{/css/typo.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/prism/css/prism.css}">
+    <link rel="stylesheet" th:href="@{/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" th:href="@{/css/about.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/aplayer/css/aplayer.min.css}" >
+    <script th:inline="javascript">
+        var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+    </script>
+</head>
+
+<body>
+
+<!--头部-->
+<header th:replace="_fragments :: header" class="gird-header">
+    <nav th:replace="_fragments :: nav(7)"></nav>
+</header>
+
+<!--中间-->
+<!--<div class="my-blog-container padded-tb-big animated slow fadeIn">-->
+
+<div class="doc-container">
+    <div class="about-banner" id="container">
+        <header class="l-top hasAnim arrow-holder">
+            <a data-path-hover="M31.3184948,33.1943359 C36.3357454,28.0664371 44.4728686,28.0690462 49.572124,33.2807584 C54.6360745,38.4563871 54.6061839,46.8782889 49.6566817,51.9369454 L31.318494,69.5197703 L49.6566817,89.71735 C54.6739322,94.8452488 54.6713794,103.161825 49.572124,108.373537 C44.5081735,113.549166 36.267997,113.518616 31.3184948,108.459959 L3.8112137,78.891075 C-1.25273677,73.7154463 -1.2880417,65.3601778 3.8112137,60.1484655 L31.3184948,33.1943359 Z">
+                <svg width="0" height="0">
+                    <path fill="#fff" d="M58.9103319,3.8342148C63.9275825,-1.29368407,72.0647057,-1.29107495,77.1639611,3.92063726C82.2279116,9.09626594,82.198021,17.5181678,77.2485188,22.5768242C77.2485188,22.5768242,31.318494,69.5197703,31.318494,69.5197703C31.318494,69.5197703,77.2485188,116.462716,77.2485188,116.462716C82.2657693,121.590615,82.2632165,129.907191,77.1639611,135.118903C72.1000106,140.294532,63.8598341,140.263982,58.9103319,135.205326C58.9103319,135.205326,3.8112137,78.891075,3.8112137,78.891075C-1.25273677,73.7154463,-1.2880417,65.3601778,3.8112137,60.1484655C3.8112137,60.1484655,58.9103319,3.8342148,58.9103319,3.8342148C58.9103319,3.8342148,58.9103319,3.8342148,58.9103319,3.8342148"></path>
+                </svg>
+            </a>
+            <a data-path-hover="M31.3184948,33.1943359 C36.3357454,28.0664371 44.4728686,28.0690462 49.572124,33.2807584 C54.6360745,38.4563871 54.6061839,46.8782889 49.6566817,51.9369454 L31.318494,69.5197703 L49.6566817,89.71735 C54.6739322,94.8452488 54.6713794,103.161825 49.572124,108.373537 C44.5081735,113.549166 36.267997,113.518616 31.3184948,108.459959 L3.8112137,78.891075 C-1.25273677,73.7154463 -1.2880417,65.3601778 3.8112137,60.1484655 L31.3184948,33.1943359 Z">
+                <svg width="0" height="0">
+                    <path fill="#fff" d="M58.9103319,3.8342148 C63.9275825,-1.29368407 72.0647057,-1.29107495 77.1639611,3.92063726 C82.2279116,9.09626594 82.198021,17.5181678 77.2485188,22.5768242 L31.318494,69.5197703 L77.2485188,116.462716 C82.2657693,121.590615 82.2632165,129.907191 77.1639611,135.118903 C72.1000106,140.294532 63.8598341,140.263982 58.9103319,135.205326 L3.8112137,78.891075 C-1.25273677,73.7154463 -1.2880417,65.3601778 3.8112137,60.1484655 L58.9103319,3.8342148 Z"></path>
+                </svg>
+            </a>
+        </header>
+        <div class="about-title">
+            <h1>留言板</h1>
+<!--            <p>Leave Your Message</p>-->
+        </div>
+    </div>
+
+    <div class="ui container">
+
+        <!--留言-->
+<!--        <div>-->
+            <div class="ui bottom attached segment" id="comment-segment">
+
+                <!--留言区域-->
+                <div id="message-container" class="ui black segment">
+                    <div th:fragment="messageList">
+                        <div class="ui threaded comments">
+<!--                            <h3 class="ui dividing header">留言</h3>-->
+
+                            <!--父级留言-->
+                            <div class="comment" th:each="message : ${messages}">
+                                <a class="avatar">
+                                    <img th:src="@{${message.avatar}}">
+                                </a>
+                                <div class="content">
+                                    <a class="author" th:text="${message.nickname}">Elliot Fu</a>
+                                    <a th:href="@{/about}">
+                                    <div class="ui mini basic purple left pointing label padded-mini"
+                                         th:if="${message.adminMessage}">博主
+                                    </div>
+                                    </a>
+                                    <div class="metadata">
+                                        <span class="date"
+                                              th:text="${#dates.format(message.createTime,'yyyy-MM-dd HH:mm')}">下午17：00</span>
+                                    </div>
+                                    <div class="text" th:text="${message.content}">
+                                        <p>谢谢!</p>
+                                    </div>
+                                    <div class="action">
+                                        <a class="reply"
+                                           th:attr="data-messageid=${message.id},data-messagenickname=${message.nickname}"
+                                           onclick="reply(this)" >回复</a>
+                                    </div>
+                                </div>
+
+                                <!--子级回复-->
+                                <div class="comments" th:if="${#arrays.length(message.replyMessages)}>0">
+                                    <div class="comment" th:each="reply : ${message.replyMessages}">
+                                        <a class="avatar">
+                                            <img th:src="@{${reply.avatar}}">
+                                        </a>
+                                        <div class="content">
+                                            <a class="author">
+                                                <span th:text="${reply.nickname}">小红</span>
+                                                <a th:href="@{/about}">
+                                                <div class="ui mini basic purple left pointing label padded-mini"
+                                                     th:if="${reply.adminMessage}">博主
+                                                </div>
+                                                </a>
+                                                &nbsp;<span th:text="|@${reply.parentNickname}|"
+                                                            class="m-text-comment">@ 小明</span>
+                                            </a>
+                                            <div class="metadata">
+                                                <span class="date"
+                                                      th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm')}">今天17：00</span>
+                                            </div>
+                                            <div class="text" th:text="${reply.content}">
+                                                How artistic!
+                                            </div>
+                                            <div class="actions">
+                                                <a class="reply"
+                                                   th:attr="data-messageid=${reply.id},data-messagenickname=${reply.nickname}"
+                                                   onclick="reply(this)">回复</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="messageform" class="ui form">
+
+                    <input type="hidden" name="parentMessage.id" value="-1">
+
+                    <div class="field">
+                        <textarea name="content" placeholder="请输入留言信息..."></textarea>
+                    </div>
+
+                    <div class="fields">
+                        <div class="field mobile-wide margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="nickname" placeholder="昵称"
+                                       th:value="${session.user} ? ${session.user.nickname}">
+                            </div>
+                        </div>
+                        <div class="field mobile-wide margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="mail icon"></i>
+                                <input type="text" name="email" placeholder="邮箱"
+                                       th:value="${session.user} ? ${session.user.email}">
+                            </div>
+                        </div>
+                        <div class="field  margin-bottom-small mobile-wide">
+<!--                            <button id="messagepost-btn" type="button" class="ui black button m-mobile-wide"><i class="edit icon"></i>发布</button>-->
+                            <button id="messagepost-btn" type="button" class="ui fc-grey button m-mobile-wide">POST</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+<!--        </div>-->
+    </div>
+</div>
+
+<!--底部-->
+<footer th:replace="_fragments :: footer"></footer>
+
+<!--<div id="aplayer"></div>-->
+<meting-js
+        server="netease"
+        type="playlist"
+        id="6739801094"
+        lrc="1"
+        loop="all"
+        fixed="true"
+        list-folded="true">
+</meting-js>
+
+<!-- 页面jQuery.js的引用位置问题,如果导入了其它与jquery有关的js文件,那么jquery.js须在其它js的前面 -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/jquerysession.js}"></script>
+<script th:src="@{/js/semantic.min.js}"></script>
+<script th:src="@{/lib/prism/js/prism.js}"></script>
+<script th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+<script th:src="@{/js/tags.js}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/logout.js}"></script>
+
+<script th:src="@{/js/yss/gloable.js}"></script>
+<script th:src="@{/js/plugins/nprogress.js}"></script>
+<script th:src="@{/js/plugins/blogbenoitboucart.min.js}"></script>
+<!--  加入 th:inline="javascript" 可以在js中取值  -->
+
+<script th:src="@{/lib/aplayer/js/APlayer.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+<script>
+    window.onload = function () {
+        NProgress.done();
+    };
+    $(function () {
+        document.onkeydown = keyDownSearch;
+        function keyDownSearch(e) {
+            var theEvent = e || window.event;
+            var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+            if (code == 13) {
+                $('#messagepost-btn').click();
+                return false;
+            }
+            return true;
+        }
+    })
+</script>
+
+<script th:inline="javascript">
+
+    $(function () {
+        $("#message-container").load(/*[[@{/messagecomment}]]*/"messagecomment");
+    });
+
+    //留言表单验证
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容'
+                }
+                ]
+            },
+            content: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入你的姓名'
+                }]
+            },
+            type: {
+                identifier: 'email',
+                rules: [{
+                    type: 'email',
+                    prompt: '请填写正确的邮箱地址'
+                }]
+            }
+        }
+    });
+
+    $('#messagepost-btn').click(function () {
+
+        var boo = $('.ui.form').form('validate form');
+
+        // if (boo) {
+        //     postData();
+        // } else {
+        //     console.log('校验失败')
+        // }
+        if (!$.session.get('user')) { // 未登录
+            layer.msg("请先登录", {
+                time: 1000,
+                icon: 5,
+                offset: '100px'
+            }, function () {
+                location.href = basePath + "/admin";
+            });
+        }
+
+        if (boo && $.session.get('user')) {
+            layer.msg("发布成功", {
+                time: 1000,
+                icon: 1,
+                offset: '100px'
+            }, function () {
+                postData();
+                console.log("校验成功");
+                // $.session.remove('user');
+                // $.session.clear();
+            });
+        } else {
+            console.log("校验失败")
+        }
+    });
+
+    // 发送请求至后端，提交留言数据
+    function postData() {
+        $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');// 这行是 Opera 的补丁, 少了它 Opera 是直接用跳的而且画面闪烁 by willin
+
+        $("#message-container").load(/*[[@{/messages}]]*/"/messages", {
+            "parentMessage.id": $("[name='parentMessage.id']").val(),
+            "nickname": $("[name='nickname']").val(),
+            "email": $("[name='email']").val(),
+            "content": $("[name='content']").val()
+        }, function (response, status, xhr) {
+            // swal("操作", "留言成功", "success");
+            $body.animate({scrollTo: $('#message-container').offset().top}, 500);
+            clearContent();
+        });
+    }
+
+    function clearContent() {
+        // $("[name='nickname']").val('');
+        // $("[name='email']").val('');
+        $("[name='content']").val('');
+        $("[name='parentMessage.id']").val(-1);
+        $("[name='content']").attr("placeholder", "请输入留言...");
+    }
+
+    function reply(obj) {
+        var messageId = $(obj).data('messageid');
+        var messageNickname = $(obj).data('messagenickname');
+        $("[name='content']").attr("placeholder", "@" + messageNickname).focus();
+        $("[name='parentMessage.id']").val(messageId);
+        // $(window).scrollTo(0,500);
+    }
+
+</script>
+</body>
+
+</html>
+
+
+

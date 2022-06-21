@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>友链管理</title>
+</head>
+
+<body>
+
+
+<div class="admin-content-container padded-nomal ">
+
+    <div class="ui segment form">
+        <input type="hidden" name="pageNum">
+        <div class="inline fields">
+            <div class="field">
+                <input type="text" name="name" placeholder="友链名称">
+                <input type="text" name="url" placeholder="友链地址">
+            </div>
+
+            <div class="field">
+                <div class="ui checkbox">
+                    <input type="checkbox" name="doShow" id="doShow">
+                    <label for="doShow">是否展示</label>
+                </div>
+            </div>
+
+            <div class="field">
+                <button type="button" id="search-btn" class="ui fc-grey button">SEARCH</button>
+            </div>
+
+        </div>
+
+
+    <div id="table-container"> <!--class="ui container"-->
+
+        <div class="ui success message" th:unless="${#strings.isEmpty(msg)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${msg}">操作成功！</p>
+        </div>
+        <div class="ui error message" th:unless="${#strings.isEmpty(errormsg)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${errormsg}">操作失败！</p>
+        </div>
+
+        <table th:fragment="linkList" class="ui table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>链接</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item,iterStat : ${linkslist.list}">
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${item.name}">菜菜的kuls</td>
+                <td th:text="${item.url}"></td>
+                <td th:text="${item.doShow} ? '展示' : '审核'"></td>
+                <td>
+                    <a th:href="@{/admin/links/{id}/update(id=${item.id})}" class=""><i class="grey pencil alternate icon"></i></a>
+                    <a th:href="@{/admin/links/{id}/delete(id=${item.id})}" class=""
+                       id="del-btn" onclick="return confirm('Confirm Delete?')"><i class="grey close icon"></i></a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+
+                   <div class="ui mini right floated pagination menu"
+                             th:unless="${linkslist.pages}==1">
+                            <a onclick="page(this)" th:attr="data-page=${linkslist.pageNum}-1"
+                               th:unless="${linkslist.isFirstPage}" class="icon item">
+                                <i class="left chevron icon"></i>
+                            </a>
+                            <a onclick="page(this)" th:each="p : ${linkslist.navigatepageNums}"
+                               th:attr="data-page=${p}"
+                               th:text="${p}" class="item"
+                               th:classappend="${linkslist.pageNum}==${p} ? 'active'">1</a>
+
+                            <a onclick="page(this)" th:attr="data-page=${linkslist.pageNum}+1"
+                               th:unless="${linkslist.isLastPage}" class="icon item">
+                                <i class="right chevron icon"></i>
+                            </a>
+                        </div>
+
+                    <a th:href="@{/admin/links/input}" class="ui right floated"><i class="ui add icon"></i></a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+
+
+    </div>
+
+    </div>
+</div>
+
+<!--中间-->
+
+</body>
+
+
+<!-- 页面jQuery.js的引用位置问题,如果导入了其它与jquery有关的js文件,那么jquery.js须在其它js的前面 -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/semantic.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+    function page(obj) {
+        $("[name='pageNum']").val($(obj).data("page"));
+        loaddata();
+    }
+
+    $('#search-btn').click(function () {
+        loaddata();
+    });
+
+    function loaddata() {
+        $("#table-container").load(/*[[@{/admin/links/search}]]*/"/admin/links/search", {
+            name: $("[name='name']").val(),
+            url: $("[name='url']").val(),
+            doShow: $("[name='doShow']").prop('checked'),
+            pageNum: $("[name='pageNum']").val()
+        });
+    }
+
+</script>
+</body>
+</html>
